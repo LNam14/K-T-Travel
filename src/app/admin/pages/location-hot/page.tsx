@@ -2,13 +2,12 @@
 
 import { useAppDispatch, useAppSelector } from "@/app/redux-store/hook";
 import { createLocationHotAsync, deleteLocationHotAsync, getLocationHotAsync, getLocationHotList } from "@/app/redux-store/location-hot/slice";
+import { SingleImageDropzone } from "@/component/single-image";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Box, Button, IconButton, Pagination, Tab, Tabs, useMediaQuery } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useEffect, useState } from "react";
 import { getLocationAsync, getLocationList } from "@/app/redux-store/location/slice";
-import { FileState, MultiImageDropzone } from "@/component/muti-image-dropzone";
-import ClearIcon from '@mui/icons-material/Clear';
 interface LocationItem {
     id: number;
     name: string;
@@ -47,26 +46,15 @@ const LocationHot = () => {
     }, [locationList]);
 
     const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
-
+    const [file, setFile] = useState<File>();
     const [progress, setProgress] = useState<
         'PENDING' | 'COMPLETE' | 'ERROR' | number
     >('PENDING');
-
+    const [uploadRes, setUploadRes] = useState<{
+        url: string;
+        filename: string;
+    }>();
     const { edgestore } = useEdgeStore();
-    const [fileStates, setFileStates] = React.useState<FileState[]>([]);
-    function updateFileProgress(key: string, progress: FileState['progress']) {
-        setFileStates((fileStates) => {
-            const newFileStates = structuredClone(fileStates);
-            const fileState = newFileStates.find(
-                (fileState) => fileState.key === key,
-            );
-            if (fileState) {
-                fileState.progress = progress;
-            }
-            return newFileStates;
-        });
-    }
-
 
     const handleSelect = (tour_option: string) => {
         const location = locationL.filter((location) => {
@@ -99,6 +87,7 @@ const LocationHot = () => {
         page: number
     ) => {
         setCurrentPage(page);
+        setCurrentPageNN(page);
     };
     const handlePageChangeNN = (
         event: React.ChangeEvent<unknown>,
@@ -159,7 +148,7 @@ const LocationHot = () => {
                     shape="rounded"
                     variant="outlined"
                     page={tabIndex === 0 ? currentPage : currentPageNN}
-                    onChange={tabIndex === 0 ? handlePageChange : handlePageChangeNN}
+                    onChange={handlePageChange}
                 />
             </Box>
         </table>
@@ -172,6 +161,7 @@ const LocationHot = () => {
     const handleSave = async () => {
         await dispatch(createLocationHotAsync({ data }));
         await dispatch(getLocationHotAsync())
+        setFile(undefined);
         setProgress('PENDING');
         setData({
             ...data,
@@ -190,8 +180,6 @@ const LocationHot = () => {
         await dispatch(deleteLocationHotAsync(id))
         await dispatch(getLocationHotAsync())
     }
-
-    console.log("pro", progress);
 
     return (
         <div style={{
@@ -248,63 +236,74 @@ const LocationHot = () => {
                     </div>
 
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", marginTop: 50, textAlign: "center", marginLeft: 10, marginRight: 10, }}>
-                    {data.image_url === "" ? (
-                        <MultiImageDropzone
-                            value={fileStates}
-                            dropzoneOptions={{
-                                maxFiles: 1,
-                                maxSize: 1024 * 1024 * 1,
-                            }}
-                            onChange={setFileStates}
-                            onFilesAdded={async (addedFiles) => {
-                                setFileStates([...fileStates, ...addedFiles]);
-                            }}
-                        />) : (
-                        <div><img style={{ height: 150 }} src={data.image_url} /></div>
+                <div style={{ display: "flex", flexDirection: "column", marginTop: 5, textAlign: "center", marginLeft: 10, marginRight: 10, }}>
+
+                    <div style={{ display: "flex", }}>
+                        Chọn hình ảnh
+                    </div>
+                    <input
+                        id="file-upload"
+                        type="file"
+                        onChange={(e) => {
+                            const selectedFile = e.target.files?.[0];
+                            if (selectedFile) {
+                                setFile(selectedFile);
+                            }
+                        }}
+                        accept="image/*"
+                        style={{ border: "1px solid #dbdbdb", marginTop: "10px", display: "none" }}
+                    />
+                    {file && (
+                        <img
+                            src={URL.createObjectURL(file)}
+                            alt="Preview"
+                            style={{ width: 200, height: 150, marginBottom: 10, marginTop: 10 }}
+                        />
                     )}
+                    <Button variant="outlined" component="span"
+                        style={{ display: progress === 'COMPLETE' ? "none" : "block" }}
+                        onClick={() => {
+                            const fileInput = document.getElementById("file-upload");
+                            if (fileInput) {
+                                fileInput.click();
+                            }
+                        }}>
+                        {file ? "Đổi  ảnh" : "Chọn ảnh"}
+                    </Button>
+
                     <Button
                         variant="contained"
                         className="mt-2"
                         onClick={async () => {
-                            await Promise.all(
-                                fileStates.map(async (fileState) => {
-                                    try {
-                                        if (
-                                            fileState.progress !== 'PENDING' ||
-                                            typeof fileState.file === 'string'
-                                        ) {
-                                            return;
-                                        }
-                                        const res = await edgestore.publicFiles.upload({
-                                            file: fileState.file,
-                                            onProgressChange: async (progress) => {
-
-                                                if (progress === 100) {
-                                                    setProgress('COMPLETE');
-                                                    await new Promise((resolve) => setTimeout(resolve, 1000));
-                                                    updateFileProgress(fileState.key, 'COMPLETE');
-                                                    setFileStates([]);
-                                                    setData(data => ({
-                                                        ...data,
-                                                        image_url: [...data.image_url, res.url]
-                                                    }));
-
-
-                                                }
-                                            },
-                                        });
-                                    } catch (err) {
-                                        updateFileProgress(fileState.key, 'ERROR');
-                                    }
-                                }),
-                            );
+                            if (file) {
+                                try {
+                                    const res = await edgestore.publicFiles.upload({
+                                        file,
+                                        onProgressChange: async (newProgress) => {
+                                            setProgress(newProgress);
+                                            if (newProgress === 100) {
+                                                await new Promise((resolve) => setTimeout(resolve, 1000));
+                                                setProgress('COMPLETE');
+                                            }
+                                        },
+                                    });
+                                    setUploadRes({
+                                        url: res.url,
+                                        filename: file.name,
+                                    });
+                                    setData(prevData => ({
+                                        ...prevData,
+                                        image_url: res.url
+                                    }))
+                                } catch (err) {
+                                    setProgress('ERROR');
+                                }
+                            }
                         }}
-
-                        disabled={!fileStates || progress !== 'PENDING'}
+                        disabled={!file || progress !== 'PENDING'}
                     >
                         {progress === 'PENDING'
-                            ? 'Upload'
+                            ? 'Xác nhận ảnh'
                             : progress === 'COMPLETE'
                                 ? 'Done'
                                 : typeof progress === 'number'
@@ -314,7 +313,7 @@ const LocationHot = () => {
                     {progress === "COMPLETE" ? <div style={{ display: "flex", justifyContent: "space-around", marginTop: 20 }}>
                         <Button variant="contained" sx={{ width: 150 }} onClick={handleSave}>Thêm mới</Button>
                         <Button variant="contained" sx={{ width: 150 }} onClick={() => {
-
+                            setFile(undefined);
                             setProgress('PENDING');
                             setData({
                                 ...data,
@@ -357,10 +356,10 @@ const LocationHot = () => {
                     <Tab label="Trong Nước" />
                     <Tab label="Nước Ngoài" />
                 </Tabs>
-                <Box hidden={tabIndex !== 0}>
+                <Box hidden={tabIndex === 1}>
                     {renderTable(currentNewsList)}
                 </Box>
-                <Box hidden={tabIndex !== 1}>
+                <Box hidden={tabIndex === 0}>
                     {renderTable(currentNewsListNN)}
                 </Box>
             </div>
