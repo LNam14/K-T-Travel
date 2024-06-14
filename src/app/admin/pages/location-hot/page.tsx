@@ -121,7 +121,7 @@ const LocationHot = () => {
                 </tr>
             </thead>
             <tbody>
-                {list.map((item: any, index: any) => (
+                {list?.map((item: any, index: any) => (
                     <tr key={index}>
                         <td style={{ width: 250, textAlign: "start" }}>{item.id}</td>
                         <td style={{ width: 250, textAlign: "start" }}>{item.name}</td>
