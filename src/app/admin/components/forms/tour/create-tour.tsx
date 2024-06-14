@@ -24,7 +24,6 @@ import { getLocationAsync, getLocationList } from "@/app/redux-store/location/sl
 import ClearIcon from '@mui/icons-material/Clear';
 import { useEdgeStore } from "@/lib/edgestore";
 import { FileState, MultiImageDropzone } from "@/component/muti-image-dropzone";
-import { isNull } from "util";
 
 interface LooseObject {
     [key: string]: any;

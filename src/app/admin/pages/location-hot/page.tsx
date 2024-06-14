@@ -2,12 +2,13 @@
 
 import { useAppDispatch, useAppSelector } from "@/app/redux-store/hook";
 import { createLocationHotAsync, deleteLocationHotAsync, getLocationHotAsync, getLocationHotList } from "@/app/redux-store/location-hot/slice";
-import { SingleImageDropzone } from "@/component/single-image";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Box, Button, IconButton, Pagination, Tab, Tabs, useMediaQuery } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useEffect, useState } from "react";
 import { getLocationAsync, getLocationList } from "@/app/redux-store/location/slice";
+import { FileState, MultiImageDropzone } from "@/component/muti-image-dropzone";
+import ClearIcon from '@mui/icons-material/Clear';
 interface LocationItem {
     id: number;
     name: string;
@@ -46,15 +47,26 @@ const LocationHot = () => {
     }, [locationList]);
 
     const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
-    const [file, setFile] = useState<File>();
+
     const [progress, setProgress] = useState<
         'PENDING' | 'COMPLETE' | 'ERROR' | number
     >('PENDING');
-    const [uploadRes, setUploadRes] = useState<{
-        url: string;
-        filename: string;
-    }>();
+
     const { edgestore } = useEdgeStore();
+    const [fileStates, setFileStates] = React.useState<FileState[]>([]);
+    function updateFileProgress(key: string, progress: FileState['progress']) {
+        setFileStates((fileStates) => {
+            const newFileStates = structuredClone(fileStates);
+            const fileState = newFileStates.find(
+                (fileState) => fileState.key === key,
+            );
+            if (fileState) {
+                fileState.progress = progress;
+            }
+            return newFileStates;
+        });
+    }
+
 
     const handleSelect = (tour_option: string) => {
         const location = locationL.filter((location) => {
@@ -68,7 +80,7 @@ const LocationHot = () => {
     }
     const [currentPage, setCurrentPage] = useState(1);
     const [currentPageNN, setCurrentPageNN] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 3;
     const newsListArray = Array.isArray(locationTN) ? locationTN : [];
     const totalPageCount = Math.ceil(newsListArray.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -76,7 +88,7 @@ const LocationHot = () => {
     const currentNewsList = newsListArray.slice(startIndex, endIndex);
 
 
-    const itemsPerPageNN = 5;
+    const itemsPerPageNN = 3;
     const newsListArrayNN = Array.isArray(locationNN) ? locationNN : [];
     const totalPageCountNN = Math.ceil(newsListArrayNN.length / itemsPerPageNN);
     const startIndexNN = (currentPage - 1) * itemsPerPageNN;
@@ -160,7 +172,6 @@ const LocationHot = () => {
     const handleSave = async () => {
         await dispatch(createLocationHotAsync({ data }));
         await dispatch(getLocationHotAsync())
-        setFile(undefined);
         setProgress('PENDING');
         setData({
             ...data,
@@ -180,6 +191,8 @@ const LocationHot = () => {
         await dispatch(getLocationHotAsync())
     }
 
+    console.log("pro", progress);
+
     return (
         <div style={{
             marginTop: lgUp ? 30 : 10, display: "flex", flexDirection: lgUp ? "row" : "column",
@@ -196,7 +209,7 @@ const LocationHot = () => {
             }}>
                 <div style={{
                     display: "flex", borderTopLeftRadius: 10, height: 50,
-                    fontSize: 20, fontWeight: "bold", justifyContent: "center", paddingTop: 20, backgroundColor: "#4287f5"
+                    fontSize: 20, fontWeight: "bold", justifyContent: "center", paddingTop: 20, backgroundColor: "#4287f5", color: "white"
                 }}>
                     Thêm Địa Điểm Nổi Bật
                 </div>
@@ -236,46 +249,59 @@ const LocationHot = () => {
 
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", marginTop: 50, textAlign: "center", marginLeft: 10, marginRight: 10, }}>
-                    {/* <SingleImageDropzone
-                        height={150}
-                        width="100%"
-                        value={file}
-                        onChange={setFile}
-                        disabled={progress !== 'PENDING'}
-                        dropzoneOptions={{
-                            maxSize: 1024 * 1024 * 1,
-                        }}
-                    /> */}
+                    {data.image_url === "" ? (
+                        <MultiImageDropzone
+                            value={fileStates}
+                            dropzoneOptions={{
+                                maxFiles: 1,
+                                maxSize: 1024 * 1024 * 1,
+                            }}
+                            onChange={setFileStates}
+                            onFilesAdded={async (addedFiles) => {
+                                setFileStates([...fileStates, ...addedFiles]);
+                            }}
+                        />) : (
+                        <div><img style={{ height: 150 }} src={data.image_url} /></div>
+                    )}
                     <Button
                         variant="contained"
                         className="mt-2"
                         onClick={async () => {
-                            if (file) {
-                                try {
-                                    const res = await edgestore.publicFiles.upload({
-                                        file,
-                                        onProgressChange: async (newProgress) => {
-                                            setProgress(newProgress);
-                                            if (newProgress === 100) {
-                                                await new Promise((resolve) => setTimeout(resolve, 1000));
-                                                setProgress('COMPLETE');
-                                            }
-                                        },
-                                    });
-                                    setUploadRes({
-                                        url: res.url,
-                                        filename: file.name,
-                                    });
-                                    setData(prevData => ({
-                                        ...prevData,
-                                        image_url: res.url
-                                    }))
-                                } catch (err) {
-                                    setProgress('ERROR');
-                                }
-                            }
+                            await Promise.all(
+                                fileStates.map(async (fileState) => {
+                                    try {
+                                        if (
+                                            fileState.progress !== 'PENDING' ||
+                                            typeof fileState.file === 'string'
+                                        ) {
+                                            return;
+                                        }
+                                        const res = await edgestore.publicFiles.upload({
+                                            file: fileState.file,
+                                            onProgressChange: async (progress) => {
+
+                                                if (progress === 100) {
+                                                    setProgress('COMPLETE');
+                                                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                                                    updateFileProgress(fileState.key, 'COMPLETE');
+                                                    setFileStates([]);
+                                                    setData(data => ({
+                                                        ...data,
+                                                        image_url: [...data.image_url, res.url]
+                                                    }));
+
+
+                                                }
+                                            },
+                                        });
+                                    } catch (err) {
+                                        updateFileProgress(fileState.key, 'ERROR');
+                                    }
+                                }),
+                            );
                         }}
-                        disabled={!file || progress !== 'PENDING'}
+
+                        disabled={!fileStates || progress !== 'PENDING'}
                     >
                         {progress === 'PENDING'
                             ? 'Upload'
@@ -288,7 +314,7 @@ const LocationHot = () => {
                     {progress === "COMPLETE" ? <div style={{ display: "flex", justifyContent: "space-around", marginTop: 20 }}>
                         <Button variant="contained" sx={{ width: 150 }} onClick={handleSave}>Thêm mới</Button>
                         <Button variant="contained" sx={{ width: 150 }} onClick={() => {
-                            setFile(undefined);
+
                             setProgress('PENDING');
                             setData({
                                 ...data,
