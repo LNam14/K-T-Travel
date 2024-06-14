@@ -98,7 +98,7 @@ const LocationHot = () => {
     const handleTabChange = (event: any, newIndex: any) => {
         setTabIndex(newIndex);
     };
-    const renderTable = (list: any) => (
+    const renderTable = (list: LocationItem[]) => (
         <table style={{
             width: "98%",
             fontFamily: "__Plus_Jakarta_Sans_ff1394, __Plus_Jakarta_Sans_Fallback_ff1394, Helvetica, Arial, sans-serif",
@@ -106,8 +106,12 @@ const LocationHot = () => {
             overflowY: "auto",
             display: "block",
             tableLayout: "fixed",
-            paddingLeft: 10, paddingRight: 10, paddingTop: 30, paddingBottom: 40,
-            marginLeft: 10, marginTop: 10,
+            paddingLeft: 10,
+            paddingRight: 10,
+            paddingTop: 30,
+            paddingBottom: 40,
+            marginLeft: 10,
+            marginTop: 10,
             borderRadius: 10,
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)"
         }}>
@@ -121,14 +125,16 @@ const LocationHot = () => {
                 </tr>
             </thead>
             <tbody>
-                {list?.map((item: any, index: any) => (
+                {list.map((item: LocationItem, index: number) => (
                     <tr key={index}>
                         <td style={{ width: 250, textAlign: "start" }}>{item.id}</td>
                         <td style={{ width: 250, textAlign: "start" }}>{item.name}</td>
                         <td style={{ width: 250, textAlign: "start" }}>{item.tour_option}</td>
-                        <td style={{ width: 250, textAlign: "start" }}><img style={{ width: 120, height: 60 }} src={item.image_url} alt={item.name} /></td>
+                        <td style={{ width: 250, textAlign: "start" }}>
+                            <img style={{ width: 120, height: 60 }} src={item.image_url} alt={item.name} />
+                        </td>
                         <td style={{ display: "flex", marginLeft: 5 }}>
-                            <IconButton sx={{ color: "#0085DB" }} onClick={() => { handleDelete(item.id) }}>
+                            <IconButton sx={{ color: "#0085DB" }} onClick={() => handleDelete(item.id)}>
                                 <DeleteIcon />
                             </IconButton>
                         </td>
@@ -137,9 +143,12 @@ const LocationHot = () => {
             </tbody>
             <Box display="flex" justifyContent="center" mt={3}>
                 <Pagination
-                    count={tabIndex !== 0 ? totalPageCountNN : totalPageCount}
-                    shape="rounded" variant="outlined" page={tabIndex !== 0 ? currentPage : currentPageNN}
-                    onChange={tabIndex !== 0 ? handlePageChange : handlePageChangeNN} />
+                    count={tabIndex === 0 ? totalPageCount : totalPageCountNN}
+                    shape="rounded"
+                    variant="outlined"
+                    page={tabIndex === 0 ? currentPage : currentPageNN}
+                    onChange={tabIndex === 0 ? handlePageChange : handlePageChangeNN}
+                />
             </Box>
         </table>
     );
@@ -227,7 +236,7 @@ const LocationHot = () => {
 
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", marginTop: 50, textAlign: "center", marginLeft: 10, marginRight: 10, }}>
-                    <SingleImageDropzone
+                    {/* <SingleImageDropzone
                         height={150}
                         width="100%"
                         value={file}
@@ -236,7 +245,7 @@ const LocationHot = () => {
                         dropzoneOptions={{
                             maxSize: 1024 * 1024 * 1,
                         }}
-                    />
+                    /> */}
                     <Button
                         variant="contained"
                         className="mt-2"
