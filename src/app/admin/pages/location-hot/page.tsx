@@ -68,7 +68,7 @@ const LocationHot = () => {
     }
     const [currentPage, setCurrentPage] = useState(1);
     const [currentPageNN, setCurrentPageNN] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 3;
     const newsListArray = Array.isArray(locationTN) ? locationTN : [];
     const totalPageCount = Math.ceil(newsListArray.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -76,7 +76,7 @@ const LocationHot = () => {
     const currentNewsList = newsListArray.slice(startIndex, endIndex);
 
 
-    const itemsPerPageNN = 5;
+    const itemsPerPageNN = 3;
     const newsListArrayNN = Array.isArray(locationNN) ? locationNN : [];
     const totalPageCountNN = Math.ceil(newsListArrayNN.length / itemsPerPageNN);
     const startIndexNN = (currentPage - 1) * itemsPerPageNN;
@@ -87,6 +87,7 @@ const LocationHot = () => {
         page: number
     ) => {
         setCurrentPage(page);
+        setCurrentPageNN(page);
     };
     const handlePageChangeNN = (
         event: React.ChangeEvent<unknown>,
@@ -147,7 +148,7 @@ const LocationHot = () => {
                     shape="rounded"
                     variant="outlined"
                     page={tabIndex === 0 ? currentPage : currentPageNN}
-                    onChange={tabIndex === 0 ? handlePageChange : handlePageChangeNN}
+                    onChange={handlePageChange}
                 />
             </Box>
         </table>
@@ -196,7 +197,7 @@ const LocationHot = () => {
             }}>
                 <div style={{
                     display: "flex", borderTopLeftRadius: 10, height: 50,
-                    fontSize: 20, fontWeight: "bold", justifyContent: "center", paddingTop: 20, backgroundColor: "#4287f5"
+                    fontSize: 20, fontWeight: "bold", justifyContent: "center", paddingTop: 20, backgroundColor: "#4287f5", color: "white"
                 }}>
                     Thêm Địa Điểm Nổi Bật
                 </div>
@@ -235,17 +236,41 @@ const LocationHot = () => {
                     </div>
 
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", marginTop: 50, textAlign: "center", marginLeft: 10, marginRight: 10, }}>
-                    {/* <SingleImageDropzone
-                        height={150}
-                        width="100%"
-                        value={file}
-                        onChange={setFile}
-                        disabled={progress !== 'PENDING'}
-                        dropzoneOptions={{
-                            maxSize: 1024 * 1024 * 1,
+                <div style={{ display: "flex", flexDirection: "column", marginTop: 5, textAlign: "center", marginLeft: 10, marginRight: 10, }}>
+
+                    <div style={{ display: "flex", }}>
+                        Chọn hình ảnh
+                    </div>
+                    <input
+                        id="file-upload"
+                        type="file"
+                        onChange={(e) => {
+                            const selectedFile = e.target.files?.[0];
+                            if (selectedFile) {
+                                setFile(selectedFile);
+                            }
                         }}
-                    /> */}
+                        accept="image/*"
+                        style={{ border: "1px solid #dbdbdb", marginTop: "10px", display: "none" }}
+                    />
+                    {file && (
+                        <img
+                            src={URL.createObjectURL(file)}
+                            alt="Preview"
+                            style={{ width: 200, height: 150, marginBottom: 10, marginTop: 10 }}
+                        />
+                    )}
+                    <Button variant="outlined" component="span"
+                        style={{ display: progress === 'COMPLETE' ? "none" : "block" }}
+                        onClick={() => {
+                            const fileInput = document.getElementById("file-upload");
+                            if (fileInput) {
+                                fileInput.click();
+                            }
+                        }}>
+                        {file ? "Đổi  ảnh" : "Chọn ảnh"}
+                    </Button>
+
                     <Button
                         variant="contained"
                         className="mt-2"
@@ -278,7 +303,7 @@ const LocationHot = () => {
                         disabled={!file || progress !== 'PENDING'}
                     >
                         {progress === 'PENDING'
-                            ? 'Upload'
+                            ? 'Xác nhận ảnh'
                             : progress === 'COMPLETE'
                                 ? 'Done'
                                 : typeof progress === 'number'
@@ -331,10 +356,10 @@ const LocationHot = () => {
                     <Tab label="Trong Nước" />
                     <Tab label="Nước Ngoài" />
                 </Tabs>
-                <Box hidden={tabIndex !== 0}>
+                <Box hidden={tabIndex === 1}>
                     {renderTable(currentNewsList)}
                 </Box>
-                <Box hidden={tabIndex !== 1}>
+                <Box hidden={tabIndex === 0}>
                     {renderTable(currentNewsListNN)}
                 </Box>
             </div>

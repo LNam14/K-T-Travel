@@ -19,7 +19,7 @@ const SidebarItem = ({ label, items, showText }: any) => {
                 <span style={{ marginLeft: showText ? 10 : 0, marginTop: 20 }}>{showText ? label : "..."}</span>
                 {items.map((item: any, index: any) => (
                     <Link key={index} href={item.href} style={{ textDecoration: "none" }}>
-                        <a
+                        <span
                             onClick={() => {
                                 setSelectedItem(item.href)
                             }}
@@ -35,7 +35,7 @@ const SidebarItem = ({ label, items, showText }: any) => {
 
                             }}>
                             <item.icon sx={{ fontSize: 32, marginLeft: 1, marginRight: 1 }} />{showText && <span>{item.title}</span>}
-                        </a>
+                        </span>
                     </Link>
                 ))
                 }
