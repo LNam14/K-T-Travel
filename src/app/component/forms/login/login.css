@@ -1,0 +1,189 @@
+@media only screen and (min-width: 768px) {
+
+    /* FormLogin.css */
+    .form-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        background-color: #f5f5f5;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 16px;
+        border-radius: 8px;
+        overflow-y: auto;
+    }
+
+    .title {
+        font-weight: bold;
+        font-size: 24px;
+        color: #291868;
+    }
+
+    .subtitle {
+        font-size: 16px;
+        color: #969696;
+        text-align: center;
+    }
+
+    .subtitle-red {
+        font-size: 16px;
+        color: #DB251A;
+        text-align: center;
+    }
+
+    .input-label {
+        margin-top: 20px;
+        color: #291868;
+    }
+
+    .input-field {
+        height: 40px;
+        font-size: 14px;
+        border-radius: 5px;
+        padding-left: 5px;
+        width: 100%;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #d6d6d6;
+    }
+
+    .input-failed {
+        height: 40px;
+        font-size: 14px;
+        border-radius: 5px;
+        padding-left: 5px;
+        width: 100%;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #DB251A;
+    }
+
+    .forgot-password {
+        font-weight: bold !important;
+        color: #291868 !important;
+        font-size: 14px !important;
+        margin-bottom: -10px;
+    }
+
+    .button {
+        background-color: #291868 !important;
+        width: 100% !important;
+        color: white !important;
+        margin-bottom: 15px;
+        height: 40px;
+        border-radius: 5px !important;
+    }
+
+    .button:hover {
+        background-color: #1b1045 !important;
+        border: none
+    }
+
+    .red-text {
+        color: #ff0000 !important;
+    }
+
+    .gray-text {
+        text-align: center;
+        color: #969696 !important;
+    }
+
+    .showPassword {
+        position: absolute;
+        right: 30px;
+        bottom: 125px;
+        z-index: 999
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+    /* FormLogin.css */
+    .form-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        background-color: #f5f5f5;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 16px;
+        border-radius: 8px;
+        overflow-y: auto;
+    }
+
+    .title {
+        font-weight: bold;
+        font-size: 24px;
+        color: #291868;
+    }
+
+    .subtitle {
+        font-size: 16px;
+        color: #969696;
+        text-align: center;
+    }
+
+    .subtitle-red {
+        font-size: 16px;
+        color: #DB251A;
+        text-align: center;
+    }
+
+    .input-label {
+        margin-top: 20px;
+        color: #291868;
+    }
+
+    .input-field {
+        height: 40px;
+        font-size: 14px;
+        border-radius: 5px;
+        padding-left: 5px;
+        width: 100%;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #d6d6d6;
+    }
+
+    .input-failed {
+        height: 40px;
+        font-size: 14px;
+        border-radius: 5px;
+        padding-left: 5px;
+        width: 100%;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #DB251A;
+    }
+
+    .forgot-password {
+        font-weight: bold !important;
+        color: #291868 !important;
+        font-size: 14px !important;
+    }
+
+    .button {
+        background-color: #291868 !important;
+        width: 100% !important;
+        color: white !important;
+        margin-bottom: 15px;
+    }
+
+    .button:hover {
+        background-color: #1b1045 !important;
+        border: none
+    }
+
+    .red-text {
+        color: #ff0000 !important;
+    }
+
+    .gray-text {
+        color: #969696 !important;
+    }
+
+    .showPassword {
+        position: absolute;
+        right: 30px;
+        bottom: 135px;
+        z-index: 999
+    }
+}
