@@ -102,7 +102,6 @@ export const updatePromotionAsync = createAsyncThunk(
     "tour/update-promotion",
     async ({ newPromotion, id }: { newPromotion: number; id: number }) => {
         const response = await axios.post("/api/tour/update/update-promotion", { newPromotion, id });
-        console.log("SSSS, ", response.data);
 
         return response.data;
     }

@@ -24,12 +24,10 @@ export const loginAsync = createAsyncThunk(
             const response = await axios.post("/api/login", {
                 ...data,
             });
+
             if (response.data.token) {
                 setCookie("token", response.data.token);
             }
-
-
-
             return response.data;
         } catch (error: any) {
             throw error.response?.data || error.message;

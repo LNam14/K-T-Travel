@@ -49,7 +49,7 @@ const Booking: React.FC = () => {
             await dispatch(getBookingAsync());
         };
         asyncCall();
-    }, [dispatch]);
+    }, []);
 
     const [count, setCount] = useState<Record<number, number>>({});
     useEffect(() => {
@@ -91,6 +91,7 @@ const Booking: React.FC = () => {
     const closeForm = () => {
         setIsOpen(false)
     }
+
     return (
         <div>
             <div style={{ height: 200, display: "flex", justifyContent: "space-between", flexWrap: "wrap", cursor: "pointer" }}>

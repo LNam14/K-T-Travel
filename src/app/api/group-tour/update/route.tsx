@@ -9,8 +9,9 @@ export async function POST(req: any) {
         }
 
         try {
-            const result: any = await excuteQuery("UPDATE group_tour SET status = ? WHERE id = ?",
-                [body["status"], body["id"]]);
+            const result: any = await excuteQuery("UPDATE group_tour SET status = 'Đã tư vấn' WHERE id = ?",
+                [body["id"]]);
+            console.log("id", body["id"]);
 
             return new Response(JSON.stringify({ result: result }), { status: 200 });
         } catch (error) {

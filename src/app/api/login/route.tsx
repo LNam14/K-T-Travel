@@ -1,25 +1,17 @@
 import excuteQuery from "../../db/db";
 import jwt from "jsonwebtoken";
-
+import bcrypt from 'bcrypt';
 export async function POST(req: any) {
     const requestHeaders = new Headers(req.headers);
-    // const apiKey = requestHeaders.get("x-api-key");
-
-    // if (apiKey !== API_KEY) {
-    //   return new Response("Not found", { status: 404 });
-    // }
-
     const { searchParams } = new URL(req.url);
+    const secretKey: any = process.env.JWT_SECRET_KEY;
 
     try {
-        let body = null;
-        const requestBody = await req.json().then((requestBody: any) => {
-            body = requestBody;
-        });
+        let body = await req.json();
 
         if (body) {
             const user: unknown = await excuteQuery(
-                "SELECT id, username, password FROM users WHERE username = ?",
+                "SELECT id, username, password, status FROM users WHERE username = ?",
                 [body["username"]]
             );
 
@@ -30,17 +22,26 @@ export async function POST(req: any) {
             }
 
             const userObj: { [key: string]: any } = (user as any)[0];
-            if (body["password"] !== userObj["password"]) {
+
+            if (userObj["status"] !== 'active') {
+                return new Response(userObj["status"] === 'lock' ? "Tài khoản bị khóa" : "Tài khoản không hoạt động", {
+                    status: 403,
+                });
+            }
+
+            const passwordMatch = await bcrypt.compare(body["password"], userObj["password"]);
+
+            if (!passwordMatch) {
                 return new Response("Sai mật khẩu", {
                     status: 401,
                 });
             }
 
-            const userId = userObj["ID"];
+            const userId = userObj["id"];
             const token = jwt.sign(
-                { userId },
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJjaGVjayI6dHJ1ZSwiYXV0aG9yaXphdGlvbiI6ImFkbWluIiwiaWF0IjoxNTk3NTQ2MzQyLCJleHAiOjE1OTc1NDc3ODJ9.Dqq0EEgF1xOYlnY8tVU31h9jkInztJVt8NEPEavG1ZU",
-                {}
+                { userId, status: userObj["status"] },
+                secretKey,
+                { expiresIn: "1h" }
             );
 
             return new Response(JSON.stringify({ token }), { status: 200 });

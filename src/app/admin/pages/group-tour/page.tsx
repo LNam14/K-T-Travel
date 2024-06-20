@@ -20,6 +20,7 @@ import { createDTTourAsync, deleteDTTourAsync, getTourAsync, updateTourAsync } f
 import { deleteBookingAsync, getBookingAsync, getBookingList, updateBookingAsync } from "@/app/redux-store/booking/slice";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { getGroupTourAsync, getGroupTourList } from "@/app/redux-store/group_tour/slice";
+import ViewGT from "../../components/forms/group-tour/view-detail";
 interface LooseObject {
     [key: string]: any;
 }
@@ -88,6 +89,22 @@ const GroupTour = () => {
         }
         return text;
     };
+    const [isOpen, setIsOpen] = useState(false);
+    const [travel, setTravel] = useState("");
+
+    const openForm = (travel: any) => {
+        setIsOpen(true);
+        setTravel(travel)
+    };
+    const closeForm = () => {
+        setIsOpen(false);
+    };
+    const handlePageChange = (
+        event: React.ChangeEvent<unknown>,
+        page: number
+    ) => {
+        setCurrentPage(page);
+    };
     return (
 
         <Box
@@ -152,33 +169,6 @@ const GroupTour = () => {
                                         color="textSecondary"
                                         variant="h6"
                                     >
-                                        Email
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        textAlign={"center"}
-                                        color="textSecondary"
-                                        variant="h6"
-                                    >
-                                        Địa chỉ
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        textAlign={"center"}
-                                        color="textSecondary"
-                                        variant="h6"
-                                    >
-                                        Công ty
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        textAlign={"center"}
-                                        color="textSecondary"
-                                        variant="h6"
-                                    >
                                         Ngày đi
                                     </Typography>
                                 </TableCell>
@@ -189,24 +179,6 @@ const GroupTour = () => {
                                         variant="h6"
                                     >
                                         Điểm đến mong muốn
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        textAlign={"center"}
-                                        color="textSecondary"
-                                        variant="h6"
-                                    >
-                                        Số người
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        textAlign={"center"}
-                                        color="textSecondary"
-                                        variant="h6"
-                                    >
-                                        Ghi chú
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
@@ -258,35 +230,7 @@ const GroupTour = () => {
                                         >
                                             {item.phone}
                                         </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography
-                                            textAlign={"center"}
-                                            variant="h6"
-                                            fontWeight={600}
-                                        >
-                                            {item.email}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography
-                                            textAlign={"center"}
-                                            variant="h6"
-                                            fontWeight={600}
-                                        >
-                                            {item.address}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography
-                                            textAlign={"center"}
-                                            variant="h6"
-                                            fontWeight={600}
-                                        >
-                                            {item.company}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
+                                    </TableCell><TableCell>
                                         <Typography
                                             textAlign={"center"}
                                             variant="h6"
@@ -302,24 +246,6 @@ const GroupTour = () => {
                                             fontWeight={600}
                                         >
                                             {item.location}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography
-                                            textAlign={"center"}
-                                            variant="h6"
-                                            fontWeight={600}
-                                        >
-                                            {item.number_of_people}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography
-                                            textAlign={"center"}
-                                            variant="h6"
-                                            fontWeight={600}
-                                        >
-                                            {truncateText(item.note, 50)}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -344,7 +270,7 @@ const GroupTour = () => {
                                             <Box display={"flex"} justifyContent={"space-around"}>
                                                 <IconButton
                                                     onClick={() => {
-                                                        //  handleUpdate(item.id, "Đã từ chối")
+                                                        openForm(item)
                                                     }}>
                                                     <VisibilityIcon />
                                                 </IconButton>
@@ -352,10 +278,21 @@ const GroupTour = () => {
                                         </Typography>
                                     </TableCell>
                                 </TableBody>
+
                             ))
                             : null}
-                    </Table>
 
+                    </Table>
+                    <ViewGT open={isOpen} closeForm={closeForm} travel={travel} />
+                    <Box display="flex" justifyContent="center" mt={3} mb={3}>
+                        <Pagination
+                            count={totalPageCount}
+                            shape="rounded"
+                            variant="outlined"
+                            page={currentPage}
+                            onChange={handlePageChange}
+                        />
+                    </Box>
                 </TableContainer>
             </div>
 

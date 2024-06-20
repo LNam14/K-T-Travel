@@ -43,6 +43,9 @@ const Booking = () => {
         id_tour: 0
     });
 
+    console.log(data);
+
+
     const [dataSP, setDataSP] = useState<LooseObject>({
         phone: "",
         title_tour: "",
@@ -63,7 +66,6 @@ const Booking = () => {
                 baby: "",
                 newborn: "",
                 note: "",
-                id_tour: 0
             })
         }
     }

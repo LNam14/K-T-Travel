@@ -1,11 +1,13 @@
 "use client";
 import { styled, Container, Box, useMediaQuery } from "@mui/material";
 import { getCookie } from "cookies-next";
-import { usePathname } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../redux-store/hook";
+import Footer from "./layout/footer/Footer";
 import Header from "./layout/header/Header";
 import Sidebar from "./layout/sidebar/Sidebar";
+
 const MainWrapper = styled("div")(() => ({
     display: "flex",
     width: "100%",
@@ -36,6 +38,19 @@ export default function RootLayout({ children }: Props) {
         const asyncCall = async () => {
             if (!token) {
                 window.location.href = "/";
+                return;
+            }
+
+            try {
+                const decodedToken: { [key: string]: any } = jwtDecode(token);
+                console.log("decodedToken", decodedToken);
+
+                if (decodedToken.status === 'lock') {
+                    window.location.href = "/";
+                }
+            } catch (error) {
+                console.error("Invalid token", error);
+                window.location.href = "/";
             }
         };
 
@@ -53,7 +68,6 @@ export default function RootLayout({ children }: Props) {
             return null;
         }
         return (
-
             <MainWrapper className="mainwrapper" sx={{ paddingLeft: 2, paddingTop: 2 }}>
                 <link rel="icon" href="/images/logo/Logo1.png" />
                 <Sidebar hideMenu={buttonClicked} setButtonClicked={setButtonClicked} />
@@ -63,8 +77,8 @@ export default function RootLayout({ children }: Props) {
                         <Box sx={{ width: "100%", }}>
                             <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>
                         </Box>
+                        <Footer />
                     </Box>
-
                 </PageWrapper>
             </MainWrapper>
         );
@@ -79,9 +93,10 @@ export default function RootLayout({ children }: Props) {
             <PageWrapper className="page-wrapper">
                 <Box sx={{ width: "93.5%" }}>
                     <Header hideMenu={hideMenu} />
-                    <Box sx={{ width: "100%", }}>
+                    <Box sx={{ width: "100%" }}>
                         <Box sx={{ minHeight: "calc(100vh - 170px)" }} onClick={() => { setButtonClicked(false) }}>{children}</Box>
                     </Box>
+                    <Footer />
                 </Box>
             </PageWrapper>
         </MainWrapper>

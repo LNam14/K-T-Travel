@@ -1,4 +1,5 @@
 import excuteQuery from "@/app/db/db";
+import moment from "moment";
 
 export async function POST(req: any) {
     const requestHeaders = new Headers(req.headers);
@@ -10,10 +11,10 @@ export async function POST(req: any) {
         if (!body) {
             return new Response("Error", { status: 401 });
         }
-
+        const date = moment().format('DD-MM-YYYY');
         try {
-            const tourResult: any = await excuteQuery("INSERT INTO booking (name, email, phone, address, adult, children, baby, newborn, note, id_tour) VALUES (?,?,?,?,?,?,?,?,?,?);",
-                [body["name"], body["email"], body["phone"], body["address"], body["adult"], body["children"], body["baby"], body["newborn"], body["note"], body["id_tour"]]);
+            const tourResult: any = await excuteQuery("INSERT INTO booking (name, email, phone, address, adult, children, baby, newborn, note, id_tour, date) VALUES (?,?,?,?,?,?,?,?,?,?,?);",
+                [body["name"], body["email"], body["phone"], body["address"], body["adult"], body["children"], body["baby"], body["newborn"], body["note"], body["id_tour"], date]);
 
             return new Response(JSON.stringify({ result: tourResult }), { status: 200 });
         } catch (error) {
