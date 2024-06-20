@@ -128,8 +128,6 @@ const Dashboard = () => {
     arrows: false,
   };
 
-  console.log("name", name);
-
   return (
     <html>
       <body>

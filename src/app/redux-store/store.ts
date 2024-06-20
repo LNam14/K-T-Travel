@@ -6,6 +6,10 @@ import locationHotReducer from "./location-hot/slice";
 import bookingReducer from "./booking/slice";
 import supportReducer from "./support/slice";
 import groupTourReducer from "./group_tour/slice";
+import userReducer from "./users/slice";
+import statisticalReducer from "./statistical/slice";
+import totalReducer from "./total/slice"
+import ratioReducer from "./ratio/slice"
 export const store = configureStore({
   reducer: {
     loginState: loginReducer,
@@ -14,7 +18,11 @@ export const store = configureStore({
     tourState: tourReducer,
     bookingState: bookingReducer,
     supportState: supportReducer,
-    groupTourState: groupTourReducer
+    groupTourState: groupTourReducer,
+    userState: userReducer,
+    statisticalState: statisticalReducer,
+    totalState: totalReducer,
+    ratioState : ratioReducer,
   },
 });
 

@@ -47,7 +47,7 @@ const Sidebar = ({ hideMenu, setButtonClicked }: any) => {
                 <div style={{
                     marginTop: 30,
                     marginRight: 5,
-                    height: 620,
+                    height: 650,
                     paddingRight: 5,
                     overflow: "auto",
                     scrollbarWidth: "none",
@@ -83,7 +83,6 @@ const Sidebar = ({ hideMenu, setButtonClicked }: any) => {
                 overflow: "auto",
                 scrollbarWidth: "none",
                 scrollbarColor: "rgba(0, 0, 0, 0.1) transparent",
-                maxHeight: 600
             }}>
                 {menuItems.map((item: any) => (
                     <SidebarItem key={item.id} label={item.label} items={item.items} showText={true} />

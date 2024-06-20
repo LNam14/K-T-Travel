@@ -41,6 +41,15 @@ export const createSupportAsync = createAsyncThunk(
         }
     }
 );
+export const updateSupportAsync = createAsyncThunk(
+    "support/update",
+    async (data: any) => {
+        const response = await axios.post("/api/support/update", data);
+
+        console.log("response.data", response.data);
+        return response.data;
+    }
+);
 
 export const supportSlice = createSlice({
     name: "support",

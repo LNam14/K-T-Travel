@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import "react-quill/dist/quill.snow.css";
 import { useAppDispatch } from "@/app/redux-store/hook";
+import { getGroupTourAsync, updateGroupTourAsync } from "@/app/redux-store/group_tour/slice";
 
 interface LooseObject {
     [key: string]: any;
@@ -15,14 +16,18 @@ interface LooseObject {
 const ViewGT = ({
     open,
     closeForm,
-    customer
+    travel
 }: {
     open: boolean;
     closeForm: any;
-    customer: any;
+    travel: any;
 }
 ) => {
     const dispatch = useAppDispatch()
+    const handleUpdate = async (id: number) => {
+        await dispatch(updateGroupTourAsync({ id }))
+        await dispatch(getGroupTourAsync())
+    }
     return (
         <Modal open={open} onClose={closeForm}>
             <Box
@@ -31,7 +36,7 @@ const ViewGT = ({
                     top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
-                    width: "50%",
+                    width: "40%",
                     bgcolor: "background.paper",
                     boxShadow: 24,
                     borderRadius: 2,
@@ -43,68 +48,55 @@ const ViewGT = ({
                 }}
             >
                 <div style={{
-                    borderBottom: "1px solid #edeef0", fontSize: 30, display: "flex",
-                    justifyContent: "center", paddingTop: 40, backgroundColor: "#4287f5", fontWeight: "bold", color: "white",
-                }}>Tour</div>
+                    borderBottom: "1px solid #edeef0", fontSize: 26, display: "flex",
+                    justifyContent: "center", paddingTop: 10, backgroundColor: "#4287f5", fontWeight: "bold", color: "white",
+                }}>Du Lịch Đoàn</div>
                 <div style={{ paddingLeft: 20, paddingRight: 20, paddingBottom: 50, paddingTop: 20 }}>
-                    <div style={{ marginBottom: 10, color: "black", fontWeight: "bold" }}>
-                        {customer.tour_option} &gt;&gt; {customer.area}
-                    </div>
-                    <div>
-                        <div style={{ overflow: "hidden", transition: "height ease-in-out", borderRadius: 10, marginTop: 5 }}>
+                    <div style={{ fontSize: 16, display: "flex", justifyContent: "space-between" }}>
+                        <div>
                             <div>
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                    <div style={{ display: "flex", flexDirection: "column", width: "47%" }}>
-                                        <span style={{ fontSize: 16, fontWeight: "bold" }}>Title</span>
-                                        <input type="text"
-                                            style={{ height: 30, border: "1px solid #a1a1a1", paddingLeft: 10, borderRadius: 5 }}
-
-                                        />
-                                    </div>
-                                    <div style={{ display: "flex", flexDirection: "column", width: "47%" }}>
-                                        <span style={{ fontSize: 16, fontWeight: "bold" }}>Slot</span>
-                                        <input type="number" style={{ height: 30, border: "1px solid #a1a1a1", paddingLeft: 10, borderRadius: 5 }}
-                                        />
-                                    </div>
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20 }}>
-                                    <div style={{ display: "flex", flexDirection: "column", width: "47%" }}>
-                                        <span style={{ fontSize: 16, fontWeight: "bold" }}>Điểm Đi</span>
-                                        <input type="text" style={{ height: 30, border: "1px solid #a1a1a1", paddingLeft: 10, borderRadius: 5 }}
-                                        />
-                                    </div>
-                                    <div style={{ display: "flex", flexDirection: "column", width: "47%" }}>
-                                        <span style={{ fontSize: 16, fontWeight: "bold" }}>Điểm Đến</span>
-                                        <input type="text" style={{ height: 30, border: "1px solid #a1a1a1", paddingLeft: 10, borderRadius: 5 }}
-                                        />
-                                    </div>
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20 }}>
-                                    <div style={{ display: "flex", flexDirection: "column", width: "47%" }}>
-                                        <span style={{ fontSize: 16, fontWeight: "bold" }}>Ngày Đi</span>
-                                        <input type="date" style={{ height: 30, border: "1px solid #a1a1a1", paddingLeft: 10, borderRadius: 5 }}
-                                        />
-                                    </div>
-                                    <div style={{ display: "flex", flexDirection: "column", width: "47%" }}>
-                                        <span style={{ fontSize: 16, fontWeight: "bold" }}>Ngày Về</span>
-                                        <input type="date" style={{ height: 30, border: "1px solid #a1a1a1", paddingLeft: 10, borderRadius: 5 }}
-                                        />
-                                    </div>
-
-                                </div>
-
+                                <span style={{ fontWeight: "bold", }}>Tên khách hàng:</span> {travel.name}
+                            </div>
+                            <div>
+                                <span style={{ fontWeight: "bold", }}>Email:</span> {travel.email}
+                            </div>
+                            <div>
+                                <span style={{ fontWeight: "bold", }}>Công ty:</span> {travel.company}
+                            </div>
+                            <div>
+                                <span style={{ fontWeight: "bold", }}>Ngày đi:</span> {travel.start_date}
+                            </div>
+                            <div>
+                                <span style={{ fontSize: 16, fontWeight: "bold" }}>Ghi chú:</span> {travel.note}
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <span style={{ fontWeight: "bold", }}>Số điện thoại:</span> {travel.phone}
+                            </div>
+                            <div>
+                                <span style={{ fontWeight: "bold", }}>Địa chỉ:</span> {travel.address}
+                            </div>
+                            <div>
+                                <span style={{ fontWeight: "bold", }}>Số người:</span> {travel.number_of_people}
+                            </div>
+                            <div>
+                                <span style={{ fontWeight: "bold", }}>Điểm đến mong muốn:</span> {travel.location}
                             </div>
                         </div>
                     </div>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
+
+
+                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20 }}>
                         <Button
-                            variant="contained"
-
-
+                            variant="contained" style={{ backgroundColor: "#4287f5", width: "30%" }}
+                            onClick={() => {
+                                handleUpdate(travel.id)
+                            }}
                         >
-                            Xác nhận
+                            Đã tư vấn
                         </Button>
-                        <Button variant="contained">Đóng</Button>
+                        <Button variant="contained" style={{ backgroundColor: "#4287f5", width: "30%" }} onClick={closeForm}>Đóng</Button>
                     </div>
                 </div>
             </Box >

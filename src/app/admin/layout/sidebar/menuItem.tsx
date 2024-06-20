@@ -6,7 +6,22 @@ import LocalAirportIcon from '@mui/icons-material/LocalAirport';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import LogoutIcon from '@mui/icons-material/Logout';
+
+
 const menuItems = [
+    {
+        id: uniqueId(),
+        label: "DASHBOARD",
+        items: [
+            {
+                id: uniqueId(),
+                href: "dashboard",
+                title: "Dashboard",
+                icon: HomeIcon
+            }
+        ]
+    },
     {
         id: uniqueId(),
         label: "TOUR",
@@ -67,9 +82,9 @@ const menuItems = [
             },
             {
                 id: uniqueId(),
-                href: "dashboard5",
-                title: "HomeIcon5",
-                icon: HomeIcon
+                href: "/",
+                title: "Đăng xuất",
+                icon: LogoutIcon,
             }
         ]
     }

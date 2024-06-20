@@ -50,7 +50,7 @@ const GroupTour = () => {
                             <div style={{ width: lgUp ? "48%" : "100%", }}>
                                 <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
                                     <span style={{ fontSize: 16, fontWeight: "bold" }}>Họ và tên <span style={{ color: "red" }}>*</span></span>
-                                    <input type="text"
+                                    <input style={{ border: "1px solid #291868" }} type="text"
                                         value={data.name}
                                         onChange={(e) => {
                                             setData({
@@ -61,7 +61,7 @@ const GroupTour = () => {
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
                                     <span style={{ fontSize: 16, fontWeight: "bold" }}>Email <span style={{ color: "red" }}>*</span></span>
-                                    <input type="text"
+                                    <input style={{ border: "1px solid #291868" }} type="text"
                                         value={data.email}
                                         onChange={(e) => {
                                             setData({
@@ -72,7 +72,7 @@ const GroupTour = () => {
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
                                     <span style={{ fontSize: 16, fontWeight: "bold" }}>Công ty <span style={{ color: "red" }}>*</span></span>
-                                    <input type="text"
+                                    <input style={{ border: "1px solid #291868" }} type="text"
                                         value={data.company}
                                         onChange={(e) => {
                                             setData({
@@ -83,7 +83,7 @@ const GroupTour = () => {
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
                                     <span style={{ fontSize: 16, fontWeight: "bold" }}>Ngày đi <span style={{ color: "red" }}>*</span></span>
-                                    <input type="text"
+                                    <input style={{ border: "1px solid #291868" }} type="text"
                                         value={data.start_date}
                                         onChange={(e) => {
                                             setData({
@@ -96,7 +96,7 @@ const GroupTour = () => {
                             <div style={{ width: lgUp ? "48%" : "100%" }}>
                                 <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
                                     <span style={{ fontSize: 16, fontWeight: "bold" }}>Số điện thoại <span style={{ color: "red" }}>*</span></span>
-                                    <input type="text"
+                                    <input style={{ border: "1px solid #291868" }} type="text"
                                         value={data.phone}
                                         onChange={(e) => {
                                             setData({
@@ -107,7 +107,7 @@ const GroupTour = () => {
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
                                     <span style={{ fontSize: 16, fontWeight: "bold" }}>Địa chỉ <span style={{ color: "red" }}>*</span></span>
-                                    <input type="text"
+                                    <input style={{ border: "1px solid #291868" }} type="text"
                                         value={data.address}
                                         onChange={(e) => {
                                             setData({
@@ -118,7 +118,7 @@ const GroupTour = () => {
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
                                     <span style={{ fontSize: 16, fontWeight: "bold" }}>Số người <span style={{ color: "red" }}>*</span></span>
-                                    <input type="text"
+                                    <input style={{ border: "1px solid #291868" }} type="text"
                                         value={data.number_of_people}
                                         onChange={(e) => {
                                             setData({
@@ -129,12 +129,12 @@ const GroupTour = () => {
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
                                     <span style={{ fontSize: 16, fontWeight: "bold" }}>Điểm đến mong muốn <span style={{ color: "red" }}>*</span></span>
-                                    <input type="text"
-                                        value={data.locaion}
+                                    <input style={{ border: "1px solid #291868" }} type="text"
+                                        value={data.location}
                                         onChange={(e) => {
                                             setData({
                                                 ...data,
-                                                locaion: e.target.value
+                                                location: e.target.value
                                             })
                                         }} />
                                 </div>
@@ -143,6 +143,7 @@ const GroupTour = () => {
                         <div>
                             <span style={{ fontSize: 16, fontWeight: "bold", marginTop: 20 }}>Ghi chú</span>
                             <textarea
+                                style={{ border: "1px solid #291868" }}
                                 value={data.note}
                                 onChange={(e) => {
                                     setData({
@@ -152,7 +153,7 @@ const GroupTour = () => {
                                 }}></textarea>
                         </div>
                         <div style={{ flexDirection: "column", display: "flex" }}>
-                            <Button variant="contained" onClick={handleSave}>Đăng ký</Button>
+                            <Button style={{ backgroundColor: "#291868" }} variant="contained" onClick={handleSave}>Đăng ký</Button>
                         </div>
                     </div>
                 </div>

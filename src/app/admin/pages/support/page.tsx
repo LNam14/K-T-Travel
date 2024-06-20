@@ -22,7 +22,7 @@ import { deleteBookingAsync, getBookingAsync, getBookingList, updateBookingAsync
 import ClearIcon from '@mui/icons-material/Clear';
 import Delete from "@mui/icons-material/Delete";
 import CheckIcon from '@mui/icons-material/Check';
-import { getSupportAsync, getSupportList } from "@/app/redux-store/support/slice";
+import { getSupportAsync, getSupportList, updateSupportAsync } from "@/app/redux-store/support/slice";
 interface LooseObject {
     [key: string]: any;
 }
@@ -59,7 +59,7 @@ const Support = () => {
     const currentNewsList = newsListArray.slice(startIndex, endIndex);
     const getBackgroundColor = (status: any) => {
         switch (status) {
-            case "Đã tư vấn":
+            case "Đã hỗ trợ":
                 return "#befacd";
             case "Đã từ chối":
                 return "#fce6d2";
@@ -69,7 +69,7 @@ const Support = () => {
     }
     const getBorderColor = (status: any) => {
         switch (status) {
-            case "Đã tư vấn":
+            case "Đã hỗ trợ":
                 return "green";
             case "Đã từ chối":
                 return "orange";
@@ -77,13 +77,17 @@ const Support = () => {
                 return "red";
         }
     }
-
+    const handleSupport = async (id: number) => {
+        await dispatch(updateSupportAsync({ id }))
+        await dispatch(getSupportAsync())
+    }
     const truncateText = (text: string, maxLength: number) => {
         if (text.length > maxLength) {
             return text.substring(0, maxLength) + "...";
         }
         return text;
     };
+
     return (
 
         <Box
@@ -214,15 +218,9 @@ const Support = () => {
                                             <Box display={"flex"} justifyContent={"space-around"}>
                                                 <IconButton
                                                     onClick={() => {
-                                                        //  handleUpdate(item.id, "Đã xử lý")
+                                                        handleSupport(item.id)
                                                     }}>
                                                     <CheckIcon />
-                                                </IconButton>
-                                                <IconButton
-                                                    onClick={() => {
-                                                        //  handleUpdate(item.id, "Đã từ chối")
-                                                    }}>
-                                                    <ClearIcon />
                                                 </IconButton>
                                             </Box>
                                         </Typography>
