@@ -32,21 +32,14 @@ const Header = () => {
     }, [])
 
     useEffect(() => {
-        if (locationList) {
-            const locationsInMB = locationList.filter(location => location.area === "Miền Bắc");
-            setLocationMB(locationsInMB);
-            const locationsInMT = locationList.filter(location => location.area === "Miền Trung");
-            setLocationMT(locationsInMT);
-            const locationsInMN = locationList.filter(location => location.area === "Miền Nam");
-            setLocationMN(locationsInMN);
-            const locationsInCA = locationList.filter(location => location.area === "Châu Á");
-            setLocationCA(locationsInCA);
-            const locationsInTN = locationList.filter(location => location.tour_option === "Trong Nước");
-            setLocationTN(locationsInTN);
-            const locationsInNN = locationList.filter(location => location.tour_option === "Nước Ngoài");
-            setLocationNN(locationsInNN);
+        if (Array.isArray(locationList)) {
+            setLocationMB(locationList.filter(location => location.area === "Miền Bắc"));
+            setLocationMT(locationList.filter(location => location.area === "Miền Trung"));
+            setLocationMN(locationList.filter(location => location.area === "Miền Nam"));
+            setLocationCA(locationList.filter(location => location.area === "Châu Á"));
+            setLocationTN(locationList.filter(location => location.tour_option === "Trong Nước"));
+            setLocationNN(locationList.filter(location => location.tour_option === "Nước Ngoài"));
         }
-
     }, [locationList]);
     const [isSelectMB, setIsSelectMB] = useState(false);
     const [isSelectMN, setIsSelectMN] = useState(false);
