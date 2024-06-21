@@ -39,5 +39,13 @@
     "serverless-mysql": "^1.5.5",
     "tailwind-merge": "^2.3.0",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/chart.js": "^2.9.41",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/lodash": "^4.17.5",
+    "@types/react-slick": "^0.23.13",
+    "eslint": "^9.5.0"
   }
 }
