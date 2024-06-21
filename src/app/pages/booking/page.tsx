@@ -15,20 +15,7 @@ const Booking = () => {
     const dispatch = useAppDispatch()
 
     const [tour, setTour] = useState<any>(null);
-    useEffect(() => {
-        const storedNewsItem = localStorage.getItem("booking");
-        if (storedNewsItem) {
-            setTour(JSON.parse(storedNewsItem));
-            setData({
-                ...data,
-                id_tour: JSON.parse(storedNewsItem).id
-            })
-            setDataSP({
-                ...dataSP,
-                title_tour: JSON.parse(storedNewsItem).title
-            })
-        }
-    }, []);
+
 
     const [data, setData] = useState<LooseObject>({
         name: "",
@@ -40,8 +27,36 @@ const Booking = () => {
         baby: "",
         newborn: "",
         note: "",
-        id_tour: 0
+        id_tour: 0,
+        area: ""
     });
+    useEffect(() => {
+        const storedNewsItem = localStorage.getItem("booking");
+        if (storedNewsItem) {
+            setTour(JSON.parse(storedNewsItem));
+            setData({
+                ...data,
+                id_tour: JSON.parse(storedNewsItem).id,
+                area: JSON.parse(storedNewsItem).area
+            })
+            setDataSP({
+                ...dataSP,
+                title_tour: JSON.parse(storedNewsItem).title
+            })
+            if (JSON.parse(storedNewsItem).area === "Châu Á") {
+                setData({
+                    ...data,
+                    id_tour: JSON.parse(storedNewsItem).id,
+                    area: "Nước Ngoài"
+                })
+            }
+        }
+    }, []);
+
+
+    console.log(data);
+
+
 
     console.log(data);
 
@@ -69,6 +84,7 @@ const Booking = () => {
             })
         }
     }
+
 
     const handleSupport = async () => {
         await dispatch(createSupportAsync({ dataSP }))
