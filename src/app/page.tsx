@@ -63,7 +63,7 @@ const Dashboard = () => {
     asyncCall()
   }, [])
   useEffect(() => {
-    if (locationL) {
+    if (Array.isArray(locationL)) {
       const tourInTN: any = locationL.filter(tour => tour.tour_option === "Trong Nước");
       setLocationHotTN(tourInTN);
       const tourInNN: any = locationL.filter(tour => tour.tour_option === "Nước Ngoài");
@@ -71,7 +71,7 @@ const Dashboard = () => {
     }
   }, [locationL]);
   useEffect(() => {
-    if (tourList) {
+    if (Array.isArray(tourList)) {
       const tourInTN = tourList.filter(tour => tour.tour_option === "Trong Nước");
       setTourTN(tourInTN);
       const tourInNN = tourList.filter(tour => tour.tour_option === "Nước Ngoài");
