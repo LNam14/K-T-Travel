@@ -1,11 +1,11 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Avatar, Box, Typography, useMediaQuery } from '@mui/material';
-import ChartBar from '../../components/chart/chart';
 import { useAppDispatch, useAppSelector } from '@/app/redux-store/hook';
 import { getTotalAsync, getTotalList } from '@/app/redux-store/total/slice';
 import { getRatioAsync, getRatioList } from '@/app/redux-store/ratio/slice';
 import moment from 'moment';
+import ChartBar from '../../components/chart/chart';
 
 interface TotalItem {
     area: string;
@@ -53,8 +53,14 @@ const DashBoard = () => {
     const currentYear = moment().format('YYYY');
 
     const renderTourBox = (area: string, backgroundColor: string, logoSrc: string, imageSrc: string) => {
-        const totalData = totalListState.find(item => item.area === area);
-        const ratioData = ratioListState.find(item => item.area === area);
+        const totalData = Array.isArray(totalListState)
+            ? totalListState.find(item => item.area === area)
+            : undefined;
+
+        const ratioData = Array.isArray(ratioListState)
+            ? ratioListState.find(item => item.area === area)
+            : undefined;
+
         const sign = ratioData ? Math.sign(ratioData.ratio) : undefined;
 
         return (
