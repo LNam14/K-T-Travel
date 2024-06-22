@@ -53,14 +53,6 @@ const Booking = () => {
         }
     }, []);
 
-
-    console.log(data);
-
-
-
-    console.log(data);
-
-
     const [dataSP, setDataSP] = useState<LooseObject>({
         phone: "",
         title_tour: "",

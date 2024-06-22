@@ -11,11 +11,11 @@ const dbDev = mysql({
 
 const dbProd = mysql({
   config: {
-    host: "sql.freedb.tech",
+    host: "103.130.216.145",
     port: 3306,
-    database: "freedb_KT-Travel",
-    user: "freedb_takatech",
-    password: "z!BJ5UHyyJ?3y&W",
+    database: "viendaot_K-T-Travel",
+    user: "viendaot_takatech",
+    password: "Takatech@2024",
   },
 });
 

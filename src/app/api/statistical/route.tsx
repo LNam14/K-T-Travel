@@ -39,9 +39,15 @@ export async function GET() {
             const areaTotals: any = {};
 
             // Populate areaTotals from result
-            result.forEach((row: any) => {
-                areaTotals[row.area] = row.total;
-            });
+            if (Array.isArray(result)) {
+                result.forEach((row: any) => {
+                    areaTotals[row.area] = row.total;
+                });
+            } else {
+                console.error("Result is not an array:", result);
+                // Handle the error appropriately, e.g., return an error response
+                return new Response("Error: Result is not an array", { status: 500 });
+            }
 
             // Prepare the tour array for the current day
             const tour: any = [];
