@@ -11,11 +11,11 @@ const dbDev = mysql({
 
 const dbProd = mysql({
   config: {
-    host: "103.130.216.145",
+    host: "103.130.216.193",
     port: 3306,
-    database: "viendaot_K-T-Travel",
-    user: "viendaot_takatech",
-    password: "Takatech@2024",
+    database: "taynguye1_K-T-Travel",
+    user: "taynguye1_giahan1",
+    password: "Nam@1407",
   },
 });
 
