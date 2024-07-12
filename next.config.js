@@ -1,30 +1,33 @@
-const TerserPlugin = require("terser-webpack-plugin")
+const TerserPlugin = require("terser-webpack-plugin");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     webpack(config) {
-        // Remove TerserPlugin if not needed for minification
+        // Ensure optimization object exists
         if (!config.optimization) {
-            config.optimization = {}
-        }
-        if (!config.optimization.minimizer) {
-            config.optimization.minimizer = []
+            config.optimization = {};
         }
 
-        // Add TerserPlugin with optimized options
+        // Ensure minimizer array exists
+        if (!config.optimization.minimizer) {
+            config.optimization.minimizer = [];
+        }
+
+        // Add TerserPlugin with custom options
         config.optimization.minimizer.push(
             new TerserPlugin({
                 terserOptions: {
-                    mangle: false,
+                    mangle: false, // Example option, customize as needed
                 },
-                // Limit parallelism to reduce memory usage
-                parallel: false,
+                parallel: false, // Limit parallelism to reduce memory usage
             })
-        )
+        );
 
-        config.optimization.minimize = false
+        // Disable default minimization
+        config.optimization.minimize = false;
 
-        return config
+        return config;
     },
-}
-module.exports = nextConfig
+};
+
+module.exports = nextConfig;
